@@ -1,10 +1,10 @@
-package com.example.WorkforceManagementAPI;
+package com.railse.hiring.workforcemgmt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WorkforceManagementApiApplicationTests {
+class WorkforcemgmtApplicationTests {
 
 	@Test
 	void contextLoads() {
