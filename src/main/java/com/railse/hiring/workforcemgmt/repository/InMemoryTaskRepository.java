@@ -6,7 +6,6 @@ import com.railse.hiring.workforcemgmt.common.model.enums.Priority;
 import com.railse.hiring.workforcemgmt.common.model.enums.Task;
 import com.railse.hiring.workforcemgmt.common.model.enums.TaskStatus;
 
-import com.sun.org.apache.bcel.internal.Repository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
