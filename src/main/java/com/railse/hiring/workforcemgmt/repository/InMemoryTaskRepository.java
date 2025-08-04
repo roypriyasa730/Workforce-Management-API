@@ -84,4 +84,21 @@ public class InMemoryTaskRepository implements TaskRepository {
                 .filter(task -> assigneeIds.contains(task.getAssigneeId()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<TaskManagement> findByReferenceIdAndAssigneeId(Long referenceId, Long assigneeId) {
+        return taskStore.values().stream()
+                .filter(task -> task.getReferenceId().equals(referenceId)
+                        && task.getAssigneeId().equals(assigneeId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public TaskManagement findByReferenceId(Long referenceId) {
+        return taskStore.values().stream()
+                .filter(task -> task.getReferenceId().equals(referenceId))
+                .findFirst()
+                .orElse(null);
+        throw new UnsupportedOperationException("Unimplemented method 'findByReferenceId'");
+    }
 }

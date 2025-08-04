@@ -71,7 +71,11 @@ public class TaskManagementServiceImpl implements TaskManagementService {
 
     @Override
     public String assignByReference(AssignByReferenceRequest request) {
+        // Get task by referenceId
+        TaskManagement taskByReferenceId = taskRepository.findByReferenceId(request.getReferenceId());
+
         List<Task> applicableTasks = Task.getTasksByReferenceType(request.getReferenceType());
+
         List<TaskManagement> existingTasks = taskRepository.findByReferenceIdAndReferenceType(request.getReferenceId(),
                 request.getReferenceType());
 
@@ -80,8 +84,12 @@ public class TaskManagementServiceImpl implements TaskManagementService {
                     .filter(t -> t.getTask() == taskType && t.getStatus() != TaskStatus.COMPLETED)
                     .collect(Collectors.toList());
 
-            // BUG #1 is here. It should assign one and cancel the rest.
-            // Instead, it reassigns ALL of them.
+            // BUG #1 is here. It should assign to one sales person value assignee_ids
+            // but not removing existing tasks from manager
+            /*
+             * After Entity task assign to Sales Person, that create three tasks with
+             * ASSIGNED status.
+             */
             if (!tasksOfType.isEmpty()) {
                 for (TaskManagement taskToUpdate : tasksOfType) {
                     taskToUpdate.setAssigneeId(request.getAssigneeId());
@@ -98,6 +106,18 @@ public class TaskManagementServiceImpl implements TaskManagementService {
                 taskRepository.save(newTask);
             }
         }
+
+        // Get Task by referenceId and also change the status of all task to CANCLED
+        List<TaskManagement> tasks = taskRepository.findByReferenceIdAndAssigneeId(request.getReferenceId(),
+                taskByReferenceId.getAssigneeId());
+        if (tasks.isEmpty()) {
+            throw new ResourceNotFoundException("No tasks found for reference ID: " + request.getReferenceId());
+        }
+        for (TaskManagement task : tasks) {
+            task.setStatus(TaskStatus.CANCELLED);
+            taskRepository.save(task);
+        }
+
         return "Tasks assigned successfully for reference " + request.getReferenceId();
     }
 

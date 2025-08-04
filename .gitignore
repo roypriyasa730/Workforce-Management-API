@@ -26,3 +26,5 @@ replay_pid*
 README.md
 .idea/
 .vscode/
+build/
+.DS_Store

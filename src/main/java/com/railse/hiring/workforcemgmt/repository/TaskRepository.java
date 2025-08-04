@@ -17,4 +17,8 @@ public interface TaskRepository {
             com.railse.hiring.workforcemgmt.common.model.enums.ReferenceType referenceType);
 
     List<TaskManagement> findByAssigneeIdIn(List<Long> assigneeIds);
+
+    List<TaskManagement> findByReferenceIdAndAssigneeId(Long referenceId, Long assigneeId);
+
+    TaskManagement findByReferenceId(Long referenceId);
 }
